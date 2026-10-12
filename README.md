@@ -2,6 +2,13 @@
 
 Standalone B2 simulation and hardware-diagnostics control console.
 
+## 中文快速入口
+
+- [电脑连接与控制 Unitree B2](docs/PC_CONNECT_B2_ZH.md)
+- 控制台源码现已直接展开在 `src/`、`gateway/`、`scripts/` 和 `tests/`；历史压缩包仅
+  作为快照保留。
+- 首次连接请从只读状态检查开始，不要直接运行低层 `LowCmd`。
+
 ## Scope
 
 The console provides simulation, policy loading, keyboard/remote command
@@ -25,7 +32,10 @@ policy.
 ## Start the console
 
 ```bash
-python -m b2_control.cli_control_center --no-open-browser
+python3 -m venv .venv
+source .venv/bin/activate
+python -m pip install -e '.[dev]'
+scripts/start_b2_control_center.sh --no-open-browser
 ```
 
 The command prints a loopback URL containing a random access token. Open that
@@ -54,3 +64,7 @@ runtime before accepting a policy artifact.
 This repository intentionally excludes captured hardware logs, generated
 videos, build directories, local worktrees, and machine-specific runtime
 state. Add site-specific hardware profiles outside the public source package.
+
+The checked-in hardware profiles are reference-only and do not authorize real
+low-level activation. The software stop path is not a replacement for a
+physical emergency stop or mechanical fall protection.

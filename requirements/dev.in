@@ -1,0 +1,6 @@
+numpy>=1.26,<3
+onnxruntime>=1.17,<2
+pip==25.2
+pip-tools==7.5.0
+pytest==8.4.1
+pytest-cov==6.2.1

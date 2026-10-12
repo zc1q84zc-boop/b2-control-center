@@ -1,0 +1,76 @@
+{
+  "schema_version": 1,
+  "policy_id": "b2_stack10_resume_s42_model31997",
+  "artifacts": {
+    "checkpoint": {
+      "path": "checkpoints/model_31997.pt",
+      "sha256": "9c5c66662a90b399bf282d2106fa9a07f9ee0a8352f2c6a8933454279f55ba1d",
+      "iteration": 31997
+    },
+    "onnx": {
+      "path": "models/policy.onnx",
+      "sha256": "bbb474e2fddc800f609c2360ee083e1cda250e8076c2805dde0c2e1203c70265"
+    }
+  },
+  "model_interface": {
+    "input_name": "obs",
+    "input_dtype": "float32",
+    "input_shape": [1, 423],
+    "output_name": "actions",
+    "output_dtype": "float32",
+    "output_shape": [1, 12],
+    "architecture": [423, 512, 256, 128, 12],
+    "activation": "ELU"
+  },
+  "timing": {
+    "policy_frequency_hz": 50.0,
+    "policy_period_s": 0.02,
+    "history_samples": 10,
+    "history_order": "oldest_to_current",
+    "oldest_to_current_span_s": 0.18,
+    "append_rule": "exactly_once_per_policy_tick"
+  },
+  "current_frame": {
+    "dimension": 45,
+    "fields": [
+      {"name": "body_angular_velocity", "frame_offsets": [0, 3], "size": 3, "scale": 0.25, "units": "rad/s", "frame": "body"},
+      {"name": "projected_gravity", "frame_offsets": [3, 6], "size": 3, "scale": 1.0, "definition": "R_body_to_world^T * [0, 0, -1]"},
+      {"name": "current_command", "frame_offsets": [6, 9], "size": 3, "scale": 1.0, "order": ["vx", "vy", "wz"], "units": ["m/s", "m/s", "rad/s"]},
+      {"name": "joint_position_offset", "frame_offsets": [9, 21], "size": 12, "scale": 1.0, "definition": "q - q_default", "units": "rad"},
+      {"name": "joint_velocity", "frame_offsets": [21, 33], "size": 12, "scale": 0.05, "units": "rad/s"},
+      {"name": "previous_raw_action", "frame_offsets": [33, 45], "size": 12, "scale": 1.0, "definition": "untransformed actor output from previous policy tick"}
+    ]
+  },
+  "stacked_input": {
+    "dimension": 423,
+    "layout": "term_major",
+    "fields": [
+      {"name": "body_angular_velocity_history", "input_offsets": [0, 30], "shape": [10, 3]},
+      {"name": "projected_gravity_history", "input_offsets": [30, 60], "shape": [10, 3]},
+      {"name": "current_command", "input_offsets": [60, 63], "shape": [3]},
+      {"name": "joint_position_offset_history", "input_offsets": [63, 183], "shape": [10, 12]},
+      {"name": "joint_velocity_history", "input_offsets": [183, 303], "shape": [10, 12]},
+      {"name": "previous_raw_action_history", "input_offsets": [303, 423], "shape": [10, 12]}
+    ],
+    "reset": "clear previous action to zero; repeat the first valid post-reset 45-value frame across all ten history positions"
+  },
+  "joint_contract": {
+    "order": [
+      "FR_hip_joint", "FR_thigh_joint", "FR_calf_joint",
+      "FL_hip_joint", "FL_thigh_joint", "FL_calf_joint",
+      "RR_hip_joint", "RR_thigh_joint", "RR_calf_joint",
+      "RL_hip_joint", "RL_thigh_joint", "RL_calf_joint"
+    ],
+    "q_default_rad": [-0.1, 0.8, -1.5, 0.1, 0.8, -1.5, -0.1, 1.0, -1.5, 0.1, 1.0, -1.5],
+    "action_scale_rad": [0.125, 0.25, 0.25, 0.125, 0.25, 0.25, 0.125, 0.25, 0.25, 0.125, 0.25, 0.25],
+    "target_formula": "q_target = q_default + action_scale * raw_action",
+    "training_pd_kp": [160.0, 160.0, 160.0, 160.0, 160.0, 160.0, 160.0, 160.0, 160.0, 160.0, 160.0, 160.0],
+    "training_pd_kd": [5.0, 5.0, 5.0, 5.0, 5.0, 5.0, 5.0, 5.0, 5.0, 5.0, 5.0, 5.0]
+  },
+  "golden_reset_inference": {
+    "state": "zero body angular velocity, upright gravity, zero command, q=q_default, zero joint velocity, previous action reset to zero",
+    "tick_1_action": [0.025819316506385803, -0.518186092376709, 0.8057687878608704, -0.30372050404548645, -0.4824571907520294, 0.6106076240539551, -0.19049254059791565, -0.08689583837985992, 0.5716142058372498, -0.1486450880765915, -0.1139635220170021, 0.5394303798675537],
+    "tick_2_action": [0.020338445901870728, -0.23839375376701355, 0.814024031162262, -0.2968778610229492, -0.3385317027568817, 0.7732691764831543, -0.13612592220306396, 0.0752919390797615, 0.6935577392578125, -0.09668150544166565, -0.04141544550657272, 0.49330148100852966],
+    "tolerance": {"rtol": 0.00001, "atol": 0.000001}
+  }
+}

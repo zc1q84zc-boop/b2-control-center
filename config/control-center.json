@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "default_hardware_interface": "enp8s0",
+  "default_hardware_interface": "",
   "default_command_profile": {
     "forward_speed_m_s": 0.6,
     "lateral_speed_m_s": 0.25,
@@ -8,13 +8,8 @@
   },
   "default_policy_bundles": [
     {
-      "name": "B2 locomotion policy (current verified)",
-      "bundle": "/home/zhangchi/文档/xwechat_files/wxid_zyi9sp7uwkvz22_2442/msg/file/2026-08/b2_policy_deployment_handoff(1)/b2_policy_deployment_handoff",
-      "adapter": "b2_45x12_v1"
-    },
-    {
       "name": "B2 Stack10 resume S42 · model 31997",
-      "bundle": "/home/zhangchi/b2_control_stack/policies/b2_stack10_resume_s42_model31997",
+      "bundle": "policies/b2_stack10_resume_s42_model31997",
       "adapter": "b2_stack10_v1"
     }
   ]

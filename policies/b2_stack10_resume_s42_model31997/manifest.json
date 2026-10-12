@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "policy_id": "b2_stack10_resume_s42_model31997",
+  "policy_contract": {
+    "actor_input_dim": 423,
+    "actor_output_dim": 12,
+    "input_dtype": "float32",
+    "output_dtype": "float32",
+    "policy_rate_hz": 50,
+    "adapter": "b2_stack10_v1"
+  },
+  "artifacts": [
+    {
+      "path": "models/policy.onnx",
+      "sha256": "bbb474e2fddc800f609c2360ee083e1cda250e8076c2805dde0c2e1203c70265"
+    },
+    {
+      "path": "policy_contract.json",
+      "sha256": "78210930166ae34674a77cb07566c842560355546754f0d4c70d985c9b4b5684"
+    },
+    {
+      "path": "stack10_adapter.py",
+      "sha256": "40849a9f9fa62b0f95b2d27be0bb23f296d4d4daab3b99de0f7be643ae896522"
+    }
+  ],
+  "recommended_runtime_artifact": "models/policy.onnx"
+}
